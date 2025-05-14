@@ -18,18 +18,14 @@ public class DaoArticle {
     private String jdbcURL;
     private String jdbcUsername;
     private String jdbcPassword;
+
  
-    public DaoArticle() {
-        Properties props = new Properties();
-        try (FileInputStream in = new FileInputStream("src/main/resources/config.properties")) {
-            props.load(in);
-            this.jdbcURL = props.getProperty("db.url");
-            this.jdbcUsername = props.getProperty("db.username");
-            this.jdbcPassword = props.getProperty("db.password");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public DaoArticle() {    
+        this.jdbcURL = System.getenv("db.url");
+        this.jdbcUsername = System.getenv("db.username");
+        this.jdbcPassword = System.getenv("db.password");
     }
+
 
     public void insert(Article article) throws ClassNotFoundException, SQLException {
         String sql = "INSERT INTO articles (ref, marque, prix) VALUES (?, ?, ?)";
