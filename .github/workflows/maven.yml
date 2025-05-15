@@ -42,7 +42,7 @@ jobs:
         aws elasticbeanstalk create-application-version \
           --application-name projet-restaurant \
           --version-label $GITHUB_SHA \
-          --source-bundle S3Bucket=s3://prod-resto/app/testProj.war,S3Key=testProj.war
+          --source-bundle S3Bucket=prod-resto,S3Key=app/testProj.war
 
         aws elasticbeanstalk update-environment \
           --application-name projet-restaurant \
