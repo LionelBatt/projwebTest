@@ -22,5 +22,9 @@ public class Personne {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	@Override
+	public String toString() {
+		return "Personne [nom=" + nom + ", prenom=" + prenom + ", email=" + email + "]";
+	}
 
 }
