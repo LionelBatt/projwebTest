@@ -2,9 +2,9 @@ name: Java CI with Maven and AWS
 
 on:
   push:
-    branches: [ main ]
+    branches: [ env-test ]
   pull_request:
-    branches: [ main ]
+    branches: [ env-test ]
 
 jobs:
   build:
