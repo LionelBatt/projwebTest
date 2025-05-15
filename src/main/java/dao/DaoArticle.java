@@ -15,11 +15,12 @@ import java.util.Properties;
 import model.Article;
 
 public class DaoArticle {
-    private String jdbcURL = System.getenv("db.url");
-    private String jdbcUsername = System.getenv("db.username");
-    private String jdbcPassword = System.getenv("db.password");
+   private String jdbcURL = System.getenv("DB_URL");
+   private String jdbcUsername = System.getenv("DB_USER");
+   private String jdbcPassword = System.getenv("DB_PASSWORD");
+    
 
- 
+
     public DaoArticle() {    
     }
 
