@@ -15,81 +15,79 @@ import java.util.Properties;
 import model.Article;
 
 public class DaoArticle {
-   private String jdbcURL = System.getenv("DB_URL");
-   private String jdbcUsername = System.getenv("DB_USER");
-   private String jdbcPassword = System.getenv("DB_PASSWORD");
-    
+	private String jdbcURL = System.getenv("DB_URL");
+	private String jdbcUsername = System.getenv("DB_USER");
+	private String jdbcPassword = System.getenv("DB_PASSWORD");
 
+	public DaoArticle(String jdbcURL, String jdbcUsername, String jdbcPassword) {
+		this.jdbcURL = jdbcURL;
+		this.jdbcUsername = jdbcUsername;
+		this.jdbcPassword = jdbcPassword;
+	}
 
-    public DaoArticle() {    
-    }
+	public DaoArticle() {
+	}
 
+	public void insert(Article article) throws SQLException {
+		String sql = "INSERT INTO articles (ref, marque, prix) VALUES (?, ?, ?)";
+		try (Connection conn = DriverManager.getConnection(jdbcURL, jdbcUsername, jdbcPassword);
+				PreparedStatement ps = conn.prepareStatement(sql)) {
+			ps.setString(1, article.getRef());
+			ps.setString(2, article.getMarque());
+			ps.setDouble(3, article.getPrix());
+			ps.executeUpdate();
+		}
+	}
 
-    public void insert(Article article) throws ClassNotFoundException, SQLException {
-        String sql = "INSERT INTO articles (ref, marque, prix) VALUES (?, ?, ?)";
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        try (Connection conn = DriverManager.getConnection(jdbcURL, jdbcUsername, jdbcPassword);
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, article.getRef());
-            ps.setString(2, article.getMarque());
-            ps.setDouble(3, article.getPrix());
-            ps.executeUpdate();
-        }
-    }
+	public Article findById(String ref) throws SQLException {
+		String sql = "SELECT * FROM articles WHERE ref = ?";
+		try (Connection conn = DriverManager.getConnection(jdbcURL, jdbcUsername, jdbcPassword);
+				PreparedStatement ps = conn.prepareStatement(sql)) {
+			ps.setString(1, ref);
+			try (ResultSet rs = ps.executeQuery()) {
+				if (rs.next()) {
+					return new Article(rs.getString("ref"), rs.getString("marque"), rs.getDouble("prix"));
+				}
+			}
+		}
+		return null;
+	}
 
-    public Article findById(String ref) throws ClassNotFoundException, SQLException {
-        String sql = "SELECT * FROM articles WHERE ref = ?";
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        try (Connection conn = DriverManager.getConnection(jdbcURL, jdbcUsername, jdbcPassword);
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, ref);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return new Article(rs.getString("ref"), rs.getString("marque"), rs.getDouble("prix"));
-                }
-            }
-        }
-        return null;
-    }
+	public void delete(String ref) throws SQLException {
+		String sql = "DELETE FROM articles WHERE ref = ?";
+		try (Connection conn = DriverManager.getConnection(jdbcURL, jdbcUsername, jdbcPassword);
+				PreparedStatement ps = conn.prepareStatement(sql)) {
+			ps.setString(1, ref);
+			ps.executeUpdate();
+		}
+	}
 
-    public void delete(String ref) throws ClassNotFoundException, SQLException {
-        String sql = "DELETE FROM articles WHERE ref = ?";
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        try (Connection conn = DriverManager.getConnection(jdbcURL, jdbcUsername, jdbcPassword);
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, ref);
-            ps.executeUpdate();
-        }
-    }
+	public List<Article> findByMarque(String marque) throws SQLException {
+		List<Article> articles = new ArrayList<>();
+		String sql = "SELECT * FROM articles WHERE marque LIKE ?";
+		try (Connection conn = DriverManager.getConnection(jdbcURL, jdbcUsername, jdbcPassword);
+				PreparedStatement ps = conn.prepareStatement(sql)) {
+			ps.setString(1, "%" + marque + "%");
+			try (ResultSet rs = ps.executeQuery()) {
+				while (rs.next()) {
+					articles.add(new Article(rs.getString("ref"), rs.getString("marque"), rs.getDouble("prix")));
+				}
+			}
+		}
+		return articles;
+	}
 
-    public List<Article> findByMarque(String marque) throws ClassNotFoundException, SQLException {
-        List<Article> articles = new ArrayList<>();
-        String sql = "SELECT * FROM articles WHERE marque LIKE ?";
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        try (Connection conn = DriverManager.getConnection(jdbcURL, jdbcUsername, jdbcPassword);
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, "%" + marque + "%");
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    articles.add(new Article(rs.getString("ref"), rs.getString("marque"), rs.getDouble("prix")));
-                }
-            }
-        }
-        return articles;
-    }
-
-    public List<Article> findAll() throws ClassNotFoundException, SQLException {
-        List<Article> articles = new ArrayList<>();
-        String sql = "SELECT * FROM articles";
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        try (Connection conn = DriverManager.getConnection(jdbcURL, jdbcUsername, jdbcPassword);
-             Statement st = conn.createStatement();
-             ResultSet rs = st.executeQuery(sql)) {
-            while (rs.next()) {
-                Article article = new Article(rs.getString("ref"), rs.getString("marque"), rs.getDouble("prix"));
-                articles.add(article);
-            }
-        }
-        return articles;
-    }
+	public List<Article> findAll() throws SQLException {
+		List<Article> articles = new ArrayList<>();
+		String sql = "SELECT * FROM articles";
+		try (Connection conn = DriverManager.getConnection(jdbcURL, jdbcUsername, jdbcPassword);
+				Statement st = conn.createStatement();
+				ResultSet rs = st.executeQuery(sql)) {
+			while (rs.next()) {
+				Article article = new Article(rs.getString("ref"), rs.getString("marque"), rs.getDouble("prix"));
+				articles.add(article);
+			}
+		}
+		return articles;
+	}
 }

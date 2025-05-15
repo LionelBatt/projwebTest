@@ -40,8 +40,6 @@ public class ListeArticle extends HttpServlet {
 			List<Article> articles = dao.findAll();
 			request.setAttribute("articles", articles);
 			request.getRequestDispatcher("liste.jsp").forward(request, response);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
 		} catch (SQLException e) { 
 			e.printStackTrace();
 		}

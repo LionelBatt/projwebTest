@@ -50,8 +50,6 @@ public class FindArticle extends HttpServlet {
 			Article article = dao.findById(ref);
 			request.setAttribute("article", article);
 			request.getRequestDispatcher("recap.jsp").forward(request, response);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

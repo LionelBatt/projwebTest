@@ -11,7 +11,7 @@
         <div class="card">
             <div class="card-body">
                 <%
-                    model.Article article = (model.Article) request.getAttribute("article");
+                model.Article article = (model.Article) request.getAttribute("article");
                 %>
                         <p class="card-text">
                             <strong>Référence:</strong> <%= article.getRef() %><br>

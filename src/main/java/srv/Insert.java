@@ -52,8 +52,6 @@ public class Insert extends HttpServlet {
 			dao.insert(article);
 			request.setAttribute("article", article);
 			request.getRequestDispatcher("recap.jsp").forward(request, response);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

@@ -48,8 +48,6 @@ public class DeleteArticle extends HttpServlet {
 		try {
 			dao.delete(ref);
 			response.sendRedirect("ListeArticle");
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
