@@ -2,9 +2,9 @@ name: Java CI with Maven and AWS
 
 on:
   push:
-    branches: [ env-test ]
+    branches: [ main ]
   pull_request:
-    branches: [ env-test ]
+    branches: [ main ]
 
 jobs:
   build:
@@ -20,7 +20,7 @@ jobs:
         distribution: 'temurin'
 
     - name: Cache Maven packages
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ~/.m2
         key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
@@ -40,11 +40,11 @@ jobs:
       if: success()
       run: |
         aws elasticbeanstalk create-application-version \
-          --application-name projet-restaurant
+          --application-name projet-restaurant \
           --version-label $GITHUB_SHA \
           --source-bundle S3Bucket=s3://prod-resto/app/testProj.war,S3Key=testProj.war
 
         aws elasticbeanstalk update-environment \
-          --application-name projet-restaurant  # Remplacez par le nom de votre application Elastic Beanstalk \
-          --environment-name Projet-restaurant-env  # Remplacez par le nom de votre environnement Elastic Beanstalk \
+          --application-name projet-restaurant \
+          --environment-name Projet-restaurant-env \
           --version-label $GITHUB_SHA
