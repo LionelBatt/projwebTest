@@ -29,7 +29,7 @@ public class DaoArticle {
 
     public void insert(Article article) throws ClassNotFoundException, SQLException {
         String sql = "INSERT INTO articles (ref, marque, prix) VALUES (?, ?, ?)";
-        Class.forName("com.mysql.jdbc.Driver");
+        Class.forName("com.mysql.cj.jdbc.Driver");
         try (Connection conn = DriverManager.getConnection(jdbcURL, jdbcUsername, jdbcPassword);
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, article.getRef());
@@ -41,7 +41,7 @@ public class DaoArticle {
 
     public Article findById(String ref) throws ClassNotFoundException, SQLException {
         String sql = "SELECT * FROM articles WHERE ref = ?";
-        Class.forName("com.mysql.jdbc.Driver");
+        Class.forName("com.mysql.cj.jdbc.Driver");
         try (Connection conn = DriverManager.getConnection(jdbcURL, jdbcUsername, jdbcPassword);
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, ref);
@@ -56,7 +56,7 @@ public class DaoArticle {
 
     public void delete(String ref) throws ClassNotFoundException, SQLException {
         String sql = "DELETE FROM articles WHERE ref = ?";
-        Class.forName("com.mysql.jdbc.Driver");
+        Class.forName("com.mysql.cj.jdbc.Driver");
         try (Connection conn = DriverManager.getConnection(jdbcURL, jdbcUsername, jdbcPassword);
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, ref);
@@ -67,7 +67,7 @@ public class DaoArticle {
     public List<Article> findByMarque(String marque) throws ClassNotFoundException, SQLException {
         List<Article> articles = new ArrayList<>();
         String sql = "SELECT * FROM articles WHERE marque LIKE ?";
-        Class.forName("com.mysql.jdbc.Driver");
+        Class.forName("com.mysql.cj.jdbc.Driver");
         try (Connection conn = DriverManager.getConnection(jdbcURL, jdbcUsername, jdbcPassword);
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, "%" + marque + "%");
@@ -83,7 +83,7 @@ public class DaoArticle {
     public List<Article> findAll() throws ClassNotFoundException, SQLException {
         List<Article> articles = new ArrayList<>();
         String sql = "SELECT * FROM articles";
-        Class.forName("com.mysql.jdbc.Driver");
+        Class.forName("com.mysql.cj.jdbc.Driver");
         try (Connection conn = DriverManager.getConnection(jdbcURL, jdbcUsername, jdbcPassword);
              Statement st = conn.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
